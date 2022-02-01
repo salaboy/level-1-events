@@ -1,0 +1,31 @@
+version: 0.0.0
+name: level-1
+namespace: ""
+runtime: springboot
+registry: ""
+image: ""
+imageDigest: ""
+build: git                                          # required, specify `git` build type
+git:
+  url: https://github.com/salaboy/level-1.git   # required, git repository with the function source code
+  revision: main                                    # optional, git revision to be used (branch, tag, commit)
+  # contextDir: myfunction                          # optional, needed only if the function is not located
+                                                    # in the repository root folder
+builder: paketobuildpacks/builder:tiny
+builders:
+  default: paketobuildpacks/builder:tiny
+buildpacks: []
+volumes: []
+buildEnvs:
+- name: BP_NATIVE_IMAGE
+  value: "true"
+envs: []
+annotations: {}
+options: {}
+labels: []
+healthEndpoints:
+  liveness: /health/liveness
+  readiness: /health/readiness
+created: 2022-02-01T10:10:13.540854Z
+invocation:
+  format: http
