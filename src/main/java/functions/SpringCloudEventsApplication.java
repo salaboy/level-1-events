@@ -3,7 +3,6 @@ package functions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.function.cloudevent.CloudEventHeaderEnricher;
 import org.springframework.cloud.function.cloudevent.CloudEventMessageBuilder;
 import org.springframework.cloud.function.web.util.HeaderUtils;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +37,7 @@ public class SpringCloudEventsApplication {
   private List<KeyPressedEvent> events = new CopyOnWriteArrayList<>();
 
   @Bean
-  public Function<Message<KeyPressedEvent>, Message<LevelStatusEvent>> KeyPressed() {
+  public Function<Message<KeyPressedEvent>, Message<LevelStatusEvent>> keyPressed() {
     return m -> {
       HttpHeaders httpHeaders = HeaderUtils.fromMessage(m.getHeaders());
       
