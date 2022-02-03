@@ -44,7 +44,7 @@ public class SpringCloudEventsApplicationTests {
     ceHeaders.add(SPECVERSION, "1.0");
     ceHeaders.add(ID, UUID.randomUUID()
         .toString());
-    ceHeaders.add(TYPE, "KeyPressed");
+    ceHeaders.add(TYPE, "keyPressed");
     ceHeaders.add(SOURCE, "http://localhost:8080/keypressed");
     ceHeaders.add(SUBJECT, "game");
 

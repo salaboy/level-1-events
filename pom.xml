@@ -76,7 +76,6 @@
         <configuration>
           <classifier>${repackage.classifier}</classifier>
           <image>
-            <name>apps/native-image</name>
             <builder>paketobuildpacks/builder:tiny</builder>
             <env>
               <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
@@ -102,18 +101,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <includes>
-            <include>**/*Tests.java</include>
-            <include>**/*Test.java</include>
-          </includes>
-          <excludes>
-            <exclude>**/Abstract*.java</exclude>
-          </excludes>
-        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -185,9 +172,8 @@
       </properties>
       <dependencies>
         <dependency>
-          <groupId>org.graalvm.buildtools</groupId>
-          <artifactId>junit-platform-native</artifactId>
-          <version>${native-buildtools.version}</version>
+          <groupId>org.junit.platform</groupId>
+          <artifactId>junit-platform-launcher</artifactId>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -197,6 +183,7 @@
             <groupId>org.graalvm.buildtools</groupId>
             <artifactId>native-maven-plugin</artifactId>
             <version>${native-buildtools.version}</version>
+            <extensions>true</extensions>
             <executions>
               <execution>
                 <id>test-native</id>
