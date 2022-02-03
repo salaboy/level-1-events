@@ -1,0 +1,12 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: level-1
+spec:
+  template:
+    spec:
+      containers:
+        - image: salaboy/fmtok8s-level-1:0.1.0
+          env: 
+          - name: SPRING_PROFILES_ACTIVE
+            value: dev

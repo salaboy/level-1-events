@@ -34,37 +34,37 @@ public class SpringCloudEventsApplicationTests {
   ObjectMapper objectMapper = new ObjectMapper();
 
   @Test
-  public void testUpperCaseJsonInput() throws Exception {
+  public void testKeyPressedJsonInput() throws Exception {
 
-    Input input = new Input();
+    KeyPressedEvent keyPressedEvent = new KeyPressedEvent();
 
-    input.input = "hello";
+    keyPressedEvent.setKey("a");
 
     HttpHeaders ceHeaders = new HttpHeaders();
     ceHeaders.add(SPECVERSION, "1.0");
     ceHeaders.add(ID, UUID.randomUUID()
         .toString());
-    ceHeaders.add(TYPE, "com.redhat.faas.springboot.test");
-    ceHeaders.add(SOURCE, "http://localhost:8080/uppercase");
-    ceHeaders.add(SUBJECT, "Convert to UpperCase");
+    ceHeaders.add(TYPE, "KeyPressed");
+    ceHeaders.add(SOURCE, "http://localhost:8080/keypressed");
+    ceHeaders.add(SUBJECT, "game");
 
     ResponseEntity<String> response = this.rest.exchange(
-        RequestEntity.post(new URI("/uppercase"))
+        RequestEntity.post(new URI("/keyPressed"))
             .contentType(MediaType.APPLICATION_JSON)
             .headers(ceHeaders)
-            .body(input),
+            .body(keyPressedEvent),
         String.class);
 
     assertThat(response.getStatusCode()
         .value(), equalTo(200));
     String body = response.getBody();
     assertThat(body, notNullValue());
-    Output output = objectMapper.readValue(body,
-        Output.class);
-    assertThat(output, notNullValue());
-    assertThat(output.input, equalTo("hello"));
-    assertThat(output.operation, equalTo("Convert to UpperCase"));
-    assertThat(output.output, equalTo("HELLO"));
-    assertThat(output.error, nullValue());
+    LevelStatusEvent levelStatusEvent = objectMapper.readValue(body,
+        LevelStatusEvent.class);
+    assertThat(levelStatusEvent, notNullValue());
+    assertThat(levelStatusEvent.isCompleted(), equalTo(false));
+    assertThat(levelStatusEvent.getLevelName(), equalTo("level-1"));
+    assertThat(levelStatusEvent.getCurrentAnswer(), equalTo("a"));
+   
   }
 }

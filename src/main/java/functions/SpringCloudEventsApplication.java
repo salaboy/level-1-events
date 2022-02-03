@@ -1,21 +1,25 @@
 package functions;
 
-import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.ID;
-import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.SOURCE;
-import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.SPECVERSION;
-import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.SUBJECT;
-
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.function.cloudevent.CloudEventHeaderEnricher;
+import org.springframework.cloud.function.cloudevent.CloudEventMessageBuilder;
 import org.springframework.cloud.function.web.util.HeaderUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.Message;
+
+import java.net.URI;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.*;
 
 @SpringBootApplication
 public class SpringCloudEventsApplication {
@@ -27,8 +31,14 @@ public class SpringCloudEventsApplication {
     SpringApplication.run(SpringCloudEventsApplication.class, args);
   }
 
+  @Value("${answer:42 is the answer}")
+  private String levelAnswer;
+  
+  
+  private List<KeyPressedEvent> events = new CopyOnWriteArrayList<>();
+
   @Bean
-  public Function<Message<Input>, Output> uppercase(CloudEventHeaderEnricher enricher) {
+  public Function<Message<KeyPressedEvent>, Message<LevelStatusEvent>> KeyPressed() {
     return m -> {
       HttpHeaders httpHeaders = HeaderUtils.fromMessage(m.getHeaders());
       
@@ -41,25 +51,52 @@ public class SpringCloudEventsApplication {
       LOGGER.log(Level.INFO, "Input CE Subject:{0}",
           httpHeaders.getFirst(SUBJECT));
 
-      Input input = m.getPayload();
-      LOGGER.log(Level.INFO, "Input {0} ", input);
-      Output output = new Output();
-      output.input = input.input;
-      output.operation = httpHeaders.getFirst(SUBJECT);
-      output.output = input.input != null ? input.input.toUpperCase() : "NO DATA";
-      return output;
+      // ADD LIST OF IGNORED KEYS SUCH AS SHIFT, always compare with lowercase
+      // TODO: 
+      /// - get session + get events from session
+      /// - reproduce events, compare with answer (maybe with string contains)
+      /// - return completed or keep trying events
+      
+      
+      KeyPressedEvent keyPressedEvent = m.getPayload();
+      events.add(keyPressedEvent);
+
+      Collections.sort(events);
+
+      String currentAnswer = "";
+      for(KeyPressedEvent event: events){
+        currentAnswer += event.getKey();
+      }
+      
+      if(currentAnswer.toLowerCase().contains(levelAnswer.toLowerCase())){
+        LOGGER.log(Level.INFO, ">>>>>>>>>>CORRECT ANSWER<<<<<");
+        //return new LevelStatusEvent(currentAnswer, true);
+        return CloudEventMessageBuilder.withData(new LevelStatusEvent(currentAnswer, true))
+          .setType("LevelCompletedEvent").setId(UUID.randomUUID().toString())
+				.setSource(URI.create("https://level-1")).build();
+   
+      }else{
+        LOGGER.log(Level.INFO, "KEEP TRYING Current answer is: " + currentAnswer + " , expected answer: " + levelAnswer);
+        //return new LevelStatusEvent(currentAnswer, false);
+        return CloudEventMessageBuilder.withData(new LevelStatusEvent(currentAnswer, false))
+          .setType("LevelFailedEvent").setId(UUID.randomUUID().toString())
+          .setSource(URI.create("https://level-1")).build();
+      }
+      
     };
   }
 
-  @Bean
-  public CloudEventHeaderEnricher attributesProvider() {
-    return attributes -> attributes
-        .setSpecVersion("1.0")
-        .setId(UUID.randomUUID()
-            .toString())
-        .setSource("http://example.com/uppercase")
-        .setType("com.redhat.faas.springboot.events");
-  }
+//  // How does this  work for more than one function ?? 
+//  @Bean
+//  public CloudEventHeaderEnricher attributesProvider() {
+//    return attributes -> attributes
+//        .setSpecVersion("1.0")
+//        .setId(UUID.randomUUID()
+//            .toString())
+//        .setSource("level-1")
+//        .setType("LevelStatus");
+//      // I should be able to set an extension here
+//  }
 
   /**
    * Health checks
@@ -78,4 +115,5 @@ public class SpringCloudEventsApplication {
       }
     };
   }
+  
 }
