@@ -20,27 +20,9 @@
     <java.version>11</java.version>
     <spring-cloud.version>2021.0.1-SNAPSHOT</spring-cloud.version>
     <spring-native.version>0.11.3-SNAPSHOT</spring-native.version>
-    <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <log4j2.version>2.16.0</log4j2.version>
-    <maven.compiler.parameters>true</maven.compiler.parameters>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <repackage.classifier/>
   </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>${spring-cloud.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -56,12 +38,30 @@
       <artifactId>spring-native</artifactId>
       <version>${spring-native.version}</version>
     </dependency>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>io.projectreactor</groupId>
+      <artifactId>reactor-test</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
 
   <build>
     <plugins>
@@ -99,7 +99,6 @@
       </plugin>
     </plugins>
   </build>
-
   <repositories>
     <repository>
       <id>spring-snapshots</id>
@@ -136,6 +135,7 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
+
   <profiles>
     <profile>
       <id>native</id>
@@ -178,4 +178,5 @@
       </build>
     </profile>
   </profiles>
+
 </project>

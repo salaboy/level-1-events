@@ -1,4 +1,4 @@
-package functions;
+package level1;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.function.cloudevent.CloudEventMessageBuilder;
@@ -64,14 +64,12 @@ public class KeyPressedFunction implements Function<Message<KeyPressedEvent>, Me
 
     if (currentAnswer.toLowerCase().contains(levelAnswer.toLowerCase())) {
       LOGGER.log(Level.INFO, ">>>>>>>>>>CORRECT ANSWER<<<<<");
-      //return new LevelStatusEvent(currentAnswer, true);
       return CloudEventMessageBuilder.withData(new LevelStatusEvent(currentAnswer, true))
         .setType("LevelCompletedEvent").setId(UUID.randomUUID().toString())
         .setSource(URI.create("https://level-1")).build();
 
     } else {
       LOGGER.log(Level.INFO, "KEEP TRYING Current answer is: " + currentAnswer + " , expected answer: " + levelAnswer);
-      //return new LevelStatusEvent(currentAnswer, false);
       return CloudEventMessageBuilder.withData(new LevelStatusEvent(currentAnswer, false))
         .setType("LevelFailedEvent").setId(UUID.randomUUID().toString())
         .setSource(URI.create("https://level-1")).build();

@@ -1,4 +1,4 @@
-package functions;
+package level1;
 
 public class LevelStatusEvent {
   private String currentAnswer;

@@ -1,18 +1,6 @@
-package functions;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.ID;
-import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.SOURCE;
-import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.SPECVERSION;
-import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.SUBJECT;
-import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.TYPE;
+package level1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.net.URI;
-import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +10,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+
+import java.net.URI;
+import java.util.UUID;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.*;
 
 @SpringBootTest(classes = SpringCloudEventsApplication.class,
     webEnvironment = WebEnvironment.RANDOM_PORT)

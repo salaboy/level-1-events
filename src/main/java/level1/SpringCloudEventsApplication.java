@@ -1,24 +1,10 @@
-package functions;
+package level1;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.function.cloudevent.CloudEventMessageBuilder;
-import org.springframework.cloud.function.web.util.HeaderUtils;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpHeaders;
-import org.springframework.messaging.Message;
 
-import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.*;
 
 @SpringBootApplication
 public class SpringCloudEventsApplication {

@@ -2,7 +2,7 @@
 
 Welcome to your new Function project!
 
-This sample project contains a single function based on Spring Cloud Function: `functions.CloudFunctionApplication.uppercase()`, which returns the uppercase of the data passed via CloudEvents.
+This sample project contains a single function based on Spring Cloud Function: `level1.CloudFunctionApplication.uppercase()`, which returns the uppercase of the data passed via CloudEvents.
 
 ## Local execution
 
@@ -62,8 +62,8 @@ func deploy -v # also triggers build
 
 ## Function invocation
 
-Spring Cloud Functions allows you to route CloudEvents to specific functions using the `Ce-Type` attribute.
-For this example, the CloudEvent is routed to the `uppercase` function. You can define multiple functions inside this project
+Spring Cloud Functions allows you to route CloudEvents to specific level1 using the `Ce-Type` attribute.
+For this example, the CloudEvent is routed to the `uppercase` function. You can define multiple level1 inside this project
 and then use the `Ce-Type` attribute to route different CloudEvents to different Functions.
 Check the `src/main/resources/application.properties` file for the `functionRouter` configurations.
 Notice that you can also use `path-based` routing and send the any event type by specifying the function path,
