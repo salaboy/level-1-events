@@ -1,5 +1,8 @@
 package level1;
 
+import com.fasterxml.jackson.annotation.JsonClassDescription;
+
+@JsonClassDescription
 public class LevelStatus {
   private String currentAnswer;
   private String levelName;

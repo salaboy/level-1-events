@@ -47,19 +47,22 @@ public class SpringCloudEventsApplicationTests {
     ceHeaders.add(SOURCE, "http://localhost:8080/");
     ceHeaders.add(SUBJECT, "game");
 
-    ResponseEntity<String> response = this.rest.exchange(
+    ResponseEntity<LevelStatus> response = this.rest.exchange(
         RequestEntity.post(new URI("/"))
             .contentType(MediaType.APPLICATION_JSON)
             .headers(ceHeaders)
             .body(keyPressedEvent),
-        String.class);
+      LevelStatus.class);
 
     assertThat(response.getStatusCode()
         .value(), equalTo(200));
-    String body = response.getBody();
-    assertThat(body, notNullValue());
-    LevelStatus levelStatusEvent = objectMapper.readValue(body,
-        LevelStatus.class);
+    LevelStatus levelStatusEvent = response.getBody();
+    HttpHeaders headers = response.getHeaders();
+    assertThat(headers.get(TYPE), notNullValue());
+    assertThat(headers.get(TYPE), equalTo("LevelFailedEvent"));
+    assertThat(levelStatusEvent, notNullValue());
+//    LevelStatus levelStatusEvent = objectMapper.readValue(body,
+//        LevelStatus.class);
     assertThat(levelStatusEvent, notNullValue());
     assertThat(levelStatusEvent.isCompleted(), equalTo(false));
     assertThat(levelStatusEvent.getLevelName(), equalTo("level-1"));
