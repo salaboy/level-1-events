@@ -60,9 +60,7 @@ public class SpringCloudEventsApplicationTests {
     HttpHeaders headers = response.getHeaders();
     assertThat(headers.get(TYPE), notNullValue());
     assertThat(headers.get(TYPE), equalTo("LevelFailedEvent"));
-    assertThat(levelStatusEvent, notNullValue());
-//    LevelStatus levelStatusEvent = objectMapper.readValue(body,
-//        LevelStatus.class);
+    
     assertThat(levelStatusEvent, notNullValue());
     assertThat(levelStatusEvent.isCompleted(), equalTo(false));
     assertThat(levelStatusEvent.getLevelName(), equalTo("level-1"));
