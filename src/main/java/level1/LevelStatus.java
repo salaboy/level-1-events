@@ -1,20 +1,20 @@
 package level1;
 
-public class LevelStatusEvent {
+public class LevelStatus {
   private String currentAnswer;
   private String levelName;
   private boolean completed;
 
-  public LevelStatusEvent() {
+  public LevelStatus() {
   }
 
-  public LevelStatusEvent(String currentAnswer, boolean completed) {
+  public LevelStatus(String currentAnswer, boolean completed) {
     this.levelName = "level-1";
     this.currentAnswer = currentAnswer;
     this.completed = completed;
   }
 
-  public LevelStatusEvent(String currentAnswer, String levelName, boolean completed) {
+  public LevelStatus(String currentAnswer, String levelName, boolean completed) {
     this.currentAnswer = currentAnswer;
     this.levelName = levelName;
     this.completed = completed;

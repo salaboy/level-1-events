@@ -12,6 +12,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
+import java.util.Date;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,20 +33,22 @@ public class SpringCloudEventsApplicationTests {
   @Test
   public void testKeyPressedJsonInput() throws Exception {
 
-    KeyPressedEvent keyPressedEvent = new KeyPressedEvent();
+    KeyPressed keyPressedEvent = new KeyPressed();
 
     keyPressedEvent.setKey("a");
+    keyPressedEvent.setPosition(0);
+    keyPressedEvent.setTimestamp(new Date());
 
     HttpHeaders ceHeaders = new HttpHeaders();
     ceHeaders.add(SPECVERSION, "1.0");
     ceHeaders.add(ID, UUID.randomUUID()
         .toString());
-    ceHeaders.add(TYPE, "keyPressed");
-    ceHeaders.add(SOURCE, "http://localhost:8080/keypressed");
+    ceHeaders.add("Ce-Type", "KeyPressedEvent");
+    ceHeaders.add(SOURCE, "http://localhost:8080/");
     ceHeaders.add(SUBJECT, "game");
 
     ResponseEntity<String> response = this.rest.exchange(
-        RequestEntity.post(new URI("/keyPressed"))
+        RequestEntity.post(new URI("/"))
             .contentType(MediaType.APPLICATION_JSON)
             .headers(ceHeaders)
             .body(keyPressedEvent),
@@ -55,8 +58,8 @@ public class SpringCloudEventsApplicationTests {
         .value(), equalTo(200));
     String body = response.getBody();
     assertThat(body, notNullValue());
-    LevelStatusEvent levelStatusEvent = objectMapper.readValue(body,
-        LevelStatusEvent.class);
+    LevelStatus levelStatusEvent = objectMapper.readValue(body,
+        LevelStatus.class);
     assertThat(levelStatusEvent, notNullValue());
     assertThat(levelStatusEvent.isCompleted(), equalTo(false));
     assertThat(levelStatusEvent.getLevelName(), equalTo("level-1"));

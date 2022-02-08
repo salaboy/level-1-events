@@ -19,8 +19,8 @@ import java.util.logging.Logger;
 import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.*;
 import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.SUBJECT;
 
-@Component("keyPressed")
-public class KeyPressedFunction implements Function<Message<KeyPressedEvent>, Message<LevelStatusEvent>> {
+@Component("KeyPressedEvent")
+public class KeyPressedFunction implements Function<Message<KeyPressed>, Message<LevelStatus>> {
 
   private static final Logger LOGGER = Logger.getLogger(
     KeyPressedFunction.class.getName());
@@ -29,10 +29,10 @@ public class KeyPressedFunction implements Function<Message<KeyPressedEvent>, Me
   private String levelAnswer;
 
 
-  private List<KeyPressedEvent> events = new CopyOnWriteArrayList<>();
+  private List<KeyPressed> events = new CopyOnWriteArrayList<>();
 
   @Override
-  public Message<LevelStatusEvent> apply(Message<KeyPressedEvent> keyPressedEventMessage) {
+  public Message<LevelStatus> apply(Message<KeyPressed> keyPressedEventMessage) {
 
     HttpHeaders httpHeaders = HeaderUtils.fromMessage(keyPressedEventMessage.getHeaders());
 
@@ -44,6 +44,8 @@ public class KeyPressedFunction implements Function<Message<KeyPressedEvent>, Me
       httpHeaders.getFirst(SOURCE));
     LOGGER.log(Level.INFO, "Input CE Subject:{0}",
       httpHeaders.getFirst(SUBJECT));
+    LOGGER.log(Level.INFO, "Input CE Type:{0}",
+      httpHeaders.getFirst(TYPE));
 
     // ADD LIST OF IGNORED KEYS SUCH AS SHIFT, always compare with lowercase
     // TODO: 
@@ -52,29 +54,33 @@ public class KeyPressedFunction implements Function<Message<KeyPressedEvent>, Me
     /// - return completed or keep trying events
 
 
-    KeyPressedEvent keyPressedEvent = keyPressedEventMessage.getPayload();
+    KeyPressed keyPressedEvent = keyPressedEventMessage.getPayload();
     events.add(keyPressedEvent);
-
+    LOGGER.log(Level.INFO, ">>> Events in Store after adding last");
+    for (KeyPressed event : events) {
+      LOGGER.log(Level.INFO, "\t >>> Event:{0}", event);
+    }
+    LOGGER.log(Level.INFO, ">>> ---------------------------------");
     Collections.sort(events);
 
     String currentAnswer = "";
-    for (KeyPressedEvent event : events) {
+    for (KeyPressed event : events) {
       currentAnswer += event.getKey();
     }
 
     if (currentAnswer.toLowerCase().contains(levelAnswer.toLowerCase())) {
       LOGGER.log(Level.INFO, ">>>>>>>>>>CORRECT ANSWER<<<<<");
-      return CloudEventMessageBuilder.withData(new LevelStatusEvent(currentAnswer, true))
+      return CloudEventMessageBuilder.withData(new LevelStatus(currentAnswer, true))
         .setType("LevelCompletedEvent").setId(UUID.randomUUID().toString())
         .setSource(URI.create("https://level-1")).build();
 
     } else {
       LOGGER.log(Level.INFO, "KEEP TRYING Current answer is: " + currentAnswer + " , expected answer: " + levelAnswer);
-      return CloudEventMessageBuilder.withData(new LevelStatusEvent(currentAnswer, false))
+      return CloudEventMessageBuilder.withData(new LevelStatus(currentAnswer, false))
         .setType("LevelFailedEvent").setId(UUID.randomUUID().toString())
         .setSource(URI.create("https://level-1")).build();
     }
 
-   
+
   }
 }

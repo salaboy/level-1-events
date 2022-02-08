@@ -1,17 +1,20 @@
 package level1;
 
+import com.fasterxml.jackson.annotation.JsonClassDescription;
+
 import java.util.Date;
 
-public class KeyPressedEvent implements Comparable<KeyPressedEvent> {
+@JsonClassDescription
+public class KeyPressed implements Comparable<KeyPressed> {
 
   private String key;
   private int position;
   private Date timestamp;
 
-  public KeyPressedEvent() {
+  public KeyPressed() {
   }
 
-  public KeyPressedEvent(String key, int position, Date timestamp) {
+  public KeyPressed(String key, int position, Date timestamp) {
     this.key = key;
     this.position = position;
     this.timestamp = timestamp;
@@ -42,7 +45,13 @@ public class KeyPressedEvent implements Comparable<KeyPressedEvent> {
   }
 
   @Override
-  public int compareTo(KeyPressedEvent input) {
+  public int compareTo(KeyPressed input) {
+    if(this.getTimestamp() == null){
+      return -1;
+    }
+    if(input == null || input.getTimestamp() == null){
+      return 1;
+    }
     if (this.getTimestamp().before(input.getTimestamp())) {
       return -1;
     } else if (this.getTimestamp().after(input.getTimestamp())) {

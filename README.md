@@ -90,14 +90,23 @@ export URL=$(kn service describe $(basename $PWD) -ourl)
 
 ### cURL
 
+curl -v "http://localhost:8080/default/default" \
+-H "Content-Type:application/json" \
+-H "Ce-Id:1" \
+-H "Ce-Subject:test" \
+-H "Ce-Source:cloud-event-example" \
+-H "Ce-Type:KeyPressedEvent" \
+-H "Ce-Specversion:1.0" \
+-d "{\"key\": \"a\", \"position\": \"0\", \"timestamp\": \"1644312102224\"}\""
+
 Using CloudEvents `Ce-Type` routing:
 ```shell script
-curl -v "$URL/" \
+curl -v "http://level-1.default.34.116.142.221.sslip.io/" \
   -H "Content-Type:application/json" \
   -H "Ce-Id:1" \
-  -H "Ce-Subject:Uppercase" \
+  -H "Ce-Subject:test" \
   -H "Ce-Source:cloud-event-example" \
-  -H "Ce-Type:uppercase" \
+  -H "Ce-Type:keyPressed" \
   -H "Ce-Specversion:1.0" \
   -d "{\"input\": \"$(whoami)\"}\""
 ```

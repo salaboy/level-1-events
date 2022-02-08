@@ -7,6 +7,18 @@ spec:
     spec:
       containers:
         - image: salaboy/fmtok8s-level-1:0.1.0
+          ports:
+            - name: http1
+              containerPort: 8081
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: 0
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: 0
+            successThreshold: 1
           env: 
           - name: SPRING_PROFILES_ACTIVE
             value: dev
