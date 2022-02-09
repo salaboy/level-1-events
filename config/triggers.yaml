@@ -13,6 +13,8 @@ spec:
       apiVersion: serving.knative.dev/v1
       kind: Service
       name: level-1 
+    uri: /KeyPressedEvent  
+      
 
 ---
 

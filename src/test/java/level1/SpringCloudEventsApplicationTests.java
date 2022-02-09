@@ -1,6 +1,5 @@
 package level1;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,8 +15,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.*;
 
 @SpringBootTest(classes = SpringCloudEventsApplication.class,
@@ -27,8 +25,6 @@ public class SpringCloudEventsApplicationTests {
   @Autowired
   private TestRestTemplate rest;
 
-  @Autowired
-  ObjectMapper objectMapper = new ObjectMapper();
 
   @Test
   public void testKeyPressedJsonInput() throws Exception {
@@ -38,12 +34,12 @@ public class SpringCloudEventsApplicationTests {
     keyPressedEvent.setKey("a");
     keyPressedEvent.setPosition(0);
     keyPressedEvent.setTimestamp(new Date());
-
+    String outGoingId = UUID.randomUUID()
+      .toString();
     HttpHeaders ceHeaders = new HttpHeaders();
     ceHeaders.add(SPECVERSION, "1.0");
-    ceHeaders.add(ID, UUID.randomUUID()
-        .toString());
-    ceHeaders.add("Ce-Type", "KeyPressedEvent");
+    ceHeaders.add(ID, outGoingId);
+    ceHeaders.add(TYPE, "KeyPressedEvent");
     ceHeaders.add(SOURCE, "http://localhost:8080/");
     ceHeaders.add(SUBJECT, "game");
 
@@ -58,8 +54,9 @@ public class SpringCloudEventsApplicationTests {
         .value(), equalTo(200));
     LevelStatus levelStatusEvent = response.getBody();
     HttpHeaders headers = response.getHeaders();
+    assertThat(headers.get(ID).get(0),  not(equalTo(outGoingId)));
     assertThat(headers.get(TYPE), notNullValue());
-    assertThat(headers.get(TYPE), equalTo("LevelFailedEvent"));
+    assertThat(headers.get(TYPE).get(0), equalTo("LevelFailedEvent"));
     
     assertThat(levelStatusEvent, notNullValue());
     assertThat(levelStatusEvent.isCompleted(), equalTo(false));
