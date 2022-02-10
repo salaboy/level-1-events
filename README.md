@@ -90,10 +90,25 @@ export URL=$(kn service describe $(basename $PWD) -ourl)
 
 ### cURL
 
-curl -v "http://localhost:8080/default/default" \
--H "Content-Type:application/json" \
+headers={content-length=54, Ce-Time=2022-02-10T09:32:27.875Z, X-Request-Id=bc3d6628-6bce-4beb-8c0a-e06212782934, User-Agent=Go-http-client/1.1, X-Forwarded-Proto=http, Prefer=reply, Host=level-1.default.svc.cluster.local, Accept-Encoding=gzip, Ce-Source=website, uri=http://level-1.default.svc.cluster.local/KeyPressedEvent, Traceparent=00-534443e9aaa8e0ff7f8d9492af7df915-243e7c6d7d9e0a0e-00, Ce-Subject=keypressed, K-Proxy-Request=activator, Ce-Id=5799e0c2-9800-405d-b1d4-124e6dcd7fe7, Ce-Type=KeyPressedEvent, Forwarded=for=10.40.1.20;proto=http, X-Forwarded-For=10.40.1.20, 10.40.1.112, Ce-Specversion=1.0, id=d1dec962-0704-3ca7-fcf8-1f8656a95909, Ce-Knativearrivaltime=2022-02-10T09:32:28.687218841Z, Content-Type=application/json; charset=UTF-8, timestamp=1644485549319}] to: org.springframework.cloud.function.context.catalog.SimpleFunctionRegistry$OriginalMessageHolder@288bd10a
+
+curl -v "http://localhost:8081/" \
+-H "Content-Type:application/json; charset=UTF-8" \
+-H "X-Request-Id:bc3d6628-6bce-4beb-8c0a-e06212782934" \
+-H "timestamp:1644485549319" \
+-H "Forwarded-for:10.40.1.20" \
+-H "Traceparent:00-534443e9aaa8e0ff7f8d9492af7df915-243e7c6d7d9e0a0e-00" \
+-H "X-Forwarded-For:10.40.1.20" \
+-H "K-Proxy-Request:activator" \
+-H "User-Agent:Go-http-client/1.1" \
+-H "Accept-Encoding:gzip" \
+-H "Prefer:reply" \
+-H "Host:level-1.default.svc.cluster.local" \
+-H "X-Forwarded-Proto:http" \
+-H "id:d1dec962-0704-3ca7-fcf8-1f8656a95909" \
 -H "Ce-Id:1" \
 -H "Ce-Subject:test" \
+-H "Ce-Time:2022-02-10T09:32:27.875Z" \
 -H "Ce-Source:cloud-event-example" \
 -H "Ce-Type:KeyPressedEvent" \
 -H "Ce-Specversion:1.0" \

@@ -14,7 +14,6 @@ spec:
       kind: Service
       name: level-1 
     uri: /KeyPressedEvent  
-      
 
 ---
 
