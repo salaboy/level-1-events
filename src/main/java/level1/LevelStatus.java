@@ -7,20 +7,32 @@ public class LevelStatus {
   private String currentAnswer;
   private String levelName;
   private boolean completed;
+  private String gameSessionId;
 
   public LevelStatus() {
   }
 
-  public LevelStatus(String currentAnswer, boolean completed) {
+  public LevelStatus(String gameSessionId, String currentAnswer, boolean completed) {
+    this.gameSessionId = gameSessionId;
     this.levelName = "level-1";
     this.currentAnswer = currentAnswer;
     this.completed = completed;
+
   }
 
-  public LevelStatus(String currentAnswer, String levelName, boolean completed) {
+  public LevelStatus(String gameSessionId, String currentAnswer, String levelName, boolean completed) {
+    this.gameSessionId = gameSessionId;
     this.currentAnswer = currentAnswer;
     this.levelName = levelName;
     this.completed = completed;
+  }
+
+  public String getGameSessionId() {
+    return gameSessionId;
+  }
+
+  public void setGameSessionId(String gameSessionId) {
+    this.gameSessionId = gameSessionId;
   }
 
   public String getCurrentAnswer() {

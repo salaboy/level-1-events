@@ -10,15 +10,11 @@ public class KeyPressed implements Comparable<KeyPressed> {
   private String key;
   private int position;
   private Date timestamp;
+  private String sessionId;
 
   public KeyPressed() {
   }
 
-  public KeyPressed(String key, int position, Date timestamp) {
-    this.key = key;
-    this.position = position;
-    this.timestamp = timestamp;
-  }
 
   public String getKey() {
     return key;
@@ -44,12 +40,21 @@ public class KeyPressed implements Comparable<KeyPressed> {
     this.timestamp = timestamp;
   }
 
+  public String getSessionId() {
+    return sessionId;
+  }
+
+
+  public void setSessionId(String sessionId) {
+    this.sessionId = sessionId;
+  }
+
   @Override
   public int compareTo(KeyPressed input) {
-    if(this.getTimestamp() == null){
+    if (this.getTimestamp() == null) {
       return -1;
     }
-    if(input == null || input.getTimestamp() == null){
+    if (input == null || input.getTimestamp() == null) {
       return 1;
     }
     if (this.getTimestamp().before(input.getTimestamp())) {
@@ -63,10 +68,11 @@ public class KeyPressed implements Comparable<KeyPressed> {
 
   @Override
   public String toString() {
-    return "Input{" +
+    return "KeyPressed{" +
       "key='" + key + '\'' +
       ", position=" + position +
       ", timestamp=" + timestamp +
+      ", sessionId='" + sessionId + '\'' +
       '}';
   }
 }

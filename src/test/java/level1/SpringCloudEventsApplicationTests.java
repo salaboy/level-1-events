@@ -34,6 +34,7 @@ public class SpringCloudEventsApplicationTests {
     keyPressedEvent.setKey("a");
     keyPressedEvent.setPosition(0);
     keyPressedEvent.setTimestamp(new Date());
+    keyPressedEvent.setSessionId("game-"+UUID.randomUUID().toString());
     String outGoingId = UUID.randomUUID()
       .toString();
     HttpHeaders ceHeaders = new HttpHeaders();
