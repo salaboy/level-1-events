@@ -27,8 +27,7 @@ public class KeyPressedFunction implements Function<Message<KeyPressed>, Message
   private static final Logger LOGGER = Logger.getLogger(
     KeyPressedFunction.class.getName());
 
-  //@Value("${answer:42 is the answer}")
-  @Value("${answer:ab}")
+  @Value("${answer:42 is the answer}")
   private String levelAnswer;
 
   private Map<String, List<KeyPressed>> eventsPerSession = new ConcurrentHashMap<>();

@@ -1,5 +1,6 @@
 package level1;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.function.context.message.MessageUtils;
@@ -92,6 +93,22 @@ public class SpringCloudEventsApplication {
         return "OK";
       }
     };
+  }
+
+  @Value("${answer:42}")
+  private String levelAnswer;
+
+  @Value("${question:What is the Answer to Life, the Universe and Everything?}")
+  private String levelQuestion;
+  
+  @Bean
+  public Function<String, String> question() {
+    return question -> levelQuestion;
+  }
+
+  @Bean
+  public Function<String, String> answer() {
+    return question -> levelAnswer;
   }
   
 }
