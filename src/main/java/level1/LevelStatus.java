@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonClassDescription;
 @JsonClassDescription
 public class LevelStatus {
   private String currentAnswer;
-  private String levelName;
+  private int levelId;
   private boolean completed;
   private String gameSessionId;
 
@@ -14,16 +14,16 @@ public class LevelStatus {
 
   public LevelStatus(String gameSessionId, String currentAnswer, boolean completed) {
     this.gameSessionId = gameSessionId;
-    this.levelName = "level-1";
+    this.levelId = 1;
     this.currentAnswer = currentAnswer;
     this.completed = completed;
 
   }
 
-  public LevelStatus(String gameSessionId, String currentAnswer, String levelName, boolean completed) {
+  public LevelStatus(String gameSessionId, String currentAnswer, int levelId, boolean completed) {
     this.gameSessionId = gameSessionId;
     this.currentAnswer = currentAnswer;
-    this.levelName = levelName;
+    this.levelId = levelId;
     this.completed = completed;
   }
 
@@ -43,12 +43,12 @@ public class LevelStatus {
     this.currentAnswer = currentAnswer;
   }
 
-  public String getLevelName() {
-    return levelName;
+  public int getLevelId() {
+    return levelId;
   }
 
-  public void setLevelName(String levelName) {
-    this.levelName = levelName;
+  public void setLevelId(int levelId) {
+    this.levelId = levelId;
   }
 
   public boolean isCompleted() {

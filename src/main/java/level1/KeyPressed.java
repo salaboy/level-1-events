@@ -14,8 +14,7 @@ public class KeyPressed implements Comparable<KeyPressed> {
 
   public KeyPressed() {
   }
-
-
+  
   public String getKey() {
     return key;
   }

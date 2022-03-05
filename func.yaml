@@ -3,27 +3,21 @@ name: level-1
 namespace: ""
 runtime: springboot
 registry: ""
-image: salaboy/level-1/level-1:latest
-imageDigest: ""
-build: git
-git:
-  url: https://github.com/salaboy/level-1.git
-  revision: main
-builder: paketobuildpacks/builder:tiny
+image: docker.io/salaboy/level-1:latest
+imageDigest: sha256:7ce932770d522bd653d2ddf55f61a537efaa61b6e150615e995d81321376a4eb
+builder: gcr.io/paketo-buildpacks/builder:base
 builders:
-  default: paketobuildpacks/builder:tiny
+  default: gcr.io/paketo-buildpacks/builder:base
 buildpacks: []
 volumes: []
 buildEnvs:
 - name: BP_NATIVE_IMAGE
-  value: "true"
+  value: "false"
 envs: []
 annotations: {}
 options: {}
 labels: []
 healthEndpoints:
-  liveness: /health/liveness
-  readiness: /health/readiness
+  liveness: /actuator/health
+  readiness: /actuator/health
 created: 2022-02-01T10:10:13.540854Z
-invocation:
-  format: http
