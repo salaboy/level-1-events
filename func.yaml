@@ -4,7 +4,7 @@ namespace: ""
 runtime: springboot
 registry: ""
 image: docker.io/salaboy/level-1:latest
-imageDigest: sha256:7ce932770d522bd653d2ddf55f61a537efaa61b6e150615e995d81321376a4eb
+imageDigest: sha256:d7f27ca157526d5650d2a63e192caaf2231ef9695b675ae444fd54f27fe84473
 builder: gcr.io/paketo-buildpacks/builder:base
 builders:
   default: gcr.io/paketo-buildpacks/builder:base
@@ -13,7 +13,15 @@ volumes: []
 buildEnvs:
 - name: BP_NATIVE_IMAGE
   value: "false"
-envs: []
+envs:
+- name: SPRING_REDIS_TIMEOUT
+  value: "60000"
+- name: SPRING_REDIS_HOST
+  value: 10.200.130.188
+- name: SPRING_REDIS_DATABASE
+  value: "0"
+- name: MANAGEMENT_HEALTH_REDIS_ENABLED
+  value: "false"
 annotations: {}
 options: {}
 labels: []

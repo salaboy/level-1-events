@@ -1,28 +1,32 @@
 package level1;
 
+import level1.eventstore.GameEventsRepository;
+import level1.eventstore.RedisConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.function.context.message.MessageUtils;
 import org.springframework.context.annotation.Bean;
-import org.springframework.nativex.hint.MethodHint;
-import org.springframework.nativex.hint.TypeHint;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
 import java.util.function.Function;
 
-import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.*;
 
-@TypeHint(types = MessageUtils.MessageStructureWithCaseInsensitiveHeaderKeys.class, methods = @MethodHint(name = "getHeaders"))
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "level1")
+@Import({RedisConfiguration.class})
 public class SpringCloudEventsApplication {
 
 //  private static final Logger LOGGER = Logger.getLogger(
 //      SpringCloudEventsApplication.class.getName());
-
+  
   public static void main(String[] args) {
     SpringApplication.run(SpringCloudEventsApplication.class, args);
   }
 
+  @Autowired
+  private EventStore store;
+  
 //  @Value("${answer:42 is the answer}")
 //  private String levelAnswer;
 //
@@ -75,26 +79,7 @@ public class SpringCloudEventsApplication {
 //
 //    };
  // }
-
-
-  /**
-   * Health checks
-   * 
-   * @return
-   */
-  @Bean
-  public Function<String, String> health() {
-    return probe -> {
-      if ("readiness".equals(probe)) {
-        return "ready";
-      } else if ("liveness".equals(probe)) {
-        return "live";
-      } else {
-        return "OK";
-      }
-    };
-  }
-
+  
   @Value("${answer:42}")
   private String levelAnswer;
 
@@ -104,6 +89,13 @@ public class SpringCloudEventsApplication {
   @Bean
   public Function<String, String> question() {
     return question -> levelQuestion;
+  }
+  
+  @Bean
+  public Function<String, String> answerBySession() {
+    return sessionId -> {
+      return store.getEventsForSession(sessionId).getEvents();
+    };
   }
 
   @Bean

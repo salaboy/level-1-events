@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -18,13 +19,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.cloud.function.cloudevent.CloudEventMessageUtils.*;
 
+@Import(EventsTestConfiguration.class)
 @SpringBootTest(classes = SpringCloudEventsApplication.class,
     webEnvironment = WebEnvironment.RANDOM_PORT)
 public class SpringCloudEventsApplicationTests {
   
   @Autowired
   private TestRestTemplate rest;
-
 
   @Test
   public void testKeyPressedJsonInput() throws Exception {
@@ -61,7 +62,7 @@ public class SpringCloudEventsApplicationTests {
     
     assertThat(levelStatusEvent, notNullValue());
     assertThat(levelStatusEvent.isCompleted(), equalTo(false));
-    assertThat(levelStatusEvent.getLevelName(), equalTo("level-1"));
+    assertThat(levelStatusEvent.getLevelId(), equalTo(1));
     assertThat(levelStatusEvent.getCurrentAnswer(), equalTo("a"));
    
   }
